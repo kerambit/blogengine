@@ -26,7 +26,7 @@ class TagForm(forms.ModelForm):
             raise ValidationError('Slug must be unique. We have "{}" slug already'.format(new_slug))
         return new_slug
 
-class PostForm(forms.ModeForm):
+class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'slug', 'body', 'tags']
