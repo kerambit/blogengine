@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.test import tag
 from django.views.generic import View
 
 from blog.forms import TagForm, PostForm
 from blog.models import Post, Tag
-from blog.utils import ObjectDetailMixin, ObjectCreateMixin
+from blog.utils import ObjectDetailMixin, ObjectCreateMixin, ObjectUpdateMixin
 
 
 def posts_list(request):
@@ -32,9 +33,10 @@ class PostCreate(ObjectCreateMixin, View):
     #         return redirect(new_post)
     #     return render(request, 'blog/post_create_form.html', context={'form': bound_form})
 
-def tags_list(request):
-    tags = Tag.objects.all()
-    return render(request, 'blog/tags_list.html', context={'tags': tags})
+class PostUpdate(ObjectUpdateMixin, View):
+    model = Post
+    model_form = PostForm
+    template = 'blog/post_update_form.html'
 
 class TagDetail(ObjectDetailMixin, View):
     model = Tag
@@ -57,4 +59,26 @@ class TagCreate(ObjectCreateMixin, View):
     #         new_tag = bound_form.save()
     #         return redirect(new_tag)
     #     return render(request, 'blog/tag_create.html', context={'form': bound_form})
+
+class TagUpdate(ObjectUpdateMixin, View):
+    model = tag
+    model_form = TagForm
+    template = 'blog/tag_update_form.html'
+    # def get(self, request, slug):
+    #     tag = Tag.objects.get(slug__iexact=slug)
+    #     bound_form = TagForm(instance=tag)
+    #     return render(request, 'blog/tag_update_form.html', context={'form': bound_form, 'tag': tag})
+    #
+    # def post(self, request, slug):
+    #     tag = Tag.objects.get(slug__iexact=slug)
+    #     bound_form = TagForm(request.POST, instance=tag)
+    #
+    #     if bound_form.is_valid():
+    #         new_tag = bound_form.save()
+    #         return redirect(new_tag)
+    #     return render(request, 'blog/tag_update_form.html', context={'form': bound_form, 'tag': tag})
+
+def tags_list(request):
+    tags = Tag.objects.all()
+    return render(request, 'blog/tags_list.html', context={'tags': tags})
 
